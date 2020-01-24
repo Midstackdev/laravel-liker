@@ -11,6 +11,12 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script>
+        window.user = {
+            authenticated: {{ auth()->check() ? 'true' : 'false' }},
+            id: {{ auth()->check() ? auth()->user()->id : ''  }}
+        }
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

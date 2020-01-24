@@ -1,3 +1,6 @@
+import user from './mixins/user'
+import pluralize from './mixins/pluralize'
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -22,6 +25,13 @@ window.Vue = require('vue');
 Vue.component('timeline', require('./components/Timeline.vue').default);
 Vue.component('post', require('./components/Post.vue').default);
 Vue.component('post-form', require('./components/PostForm.vue').default);
+Vue.component('like-button', require('./components/LikeButton.vue').default);
+
+/**
+ * Mixins
+ */
+Vue.mixin(user)
+Vue.mixin(pluralize)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
