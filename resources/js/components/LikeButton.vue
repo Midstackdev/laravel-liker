@@ -1,13 +1,21 @@
 <template>
 	<div class="like">
-		<button class="btn btn-success btn-sm like__button">Like</button>
+		<button type="button" class="btn btn-success btn-sm like__button" @click.prevent="like">Like</button>
 	</div>
 </template>
 
 <script>
-	
-	export default {
+	import bus from '../bus'
 
+	export default {
+		props: ['post'],
+		methods: {
+			like () {
+				axios.post(`/posts/${this.post.id}/likes`).then((response) => {
+					bus.$emit('post-liked', this.post.id)
+				})
+			}
+		}
 	}
 </script>
 

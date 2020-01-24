@@ -35,11 +35,25 @@
         methods: {
             addPost (post) {
                 this.posts.unshift(post)
+            },
+
+            likePost (postId) {
+                let i
+
+                for (i = 0; i <= this.posts.length; i++) {
+                    if (this.posts[i].id === postId) {
+                        this.posts[i].likeCount++
+                        this.posts[i].likedByCurrentUser = true
+                        break;
+                    }
+                }
             }
         },
 
         mounted() {
             bus.$on('post-added', this.addPost)
+            bus.$on('post-liked', this.likePost)
+
             axios.get('/posts').then((response) => {
                 this.posts = response.data
             })
