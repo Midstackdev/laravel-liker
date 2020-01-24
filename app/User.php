@@ -37,8 +37,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'avatar'
+    ];
+
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function getAvatarAttribute()
+    {
+        return 'https://www.gravatar.com/avatar/' .md5($this->email). '?s=45&d=mm';
     }
 }
