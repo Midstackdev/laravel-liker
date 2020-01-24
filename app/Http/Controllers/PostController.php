@@ -16,4 +16,17 @@ class PostController extends Controller
     {
     	return $post->with(['user'])->latestFirst()->get();
     }
+
+    public function store(Request $request)
+    {
+    	$this->validate($request, [
+    		'body' => 'required'
+    	]);
+
+    	$post = $request->user()->posts()->create([
+    		'body' => $request->body
+    	]);
+
+    	return $post->load(['user']);
+    }
 }

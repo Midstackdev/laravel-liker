@@ -21,6 +21,7 @@ window.Vue = require('vue');
 
 Vue.component('timeline', require('./components/Timeline.vue').default);
 Vue.component('post', require('./components/Post.vue').default);
+Vue.component('post-form', require('./components/PostForm.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
