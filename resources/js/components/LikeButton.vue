@@ -12,7 +12,7 @@
 		methods: {
 			like () {
 				axios.post(`/posts/${this.post.id}/likes`).then((response) => {
-					bus.$emit('post-liked', this.post.id)
+					bus.$emit('post-liked', this.post.id, true)
 				})
 			}
 		}

@@ -37,13 +37,17 @@
                 this.posts.unshift(post)
             },
 
-            likePost (postId) {
+            likePost (postId, likedByCurrentUser) {
                 let i
 
                 for (i = 0; i <= this.posts.length; i++) {
                     if (this.posts[i].id === postId) {
                         this.posts[i].likeCount++
-                        this.posts[i].likedByCurrentUser = true
+
+                        if (likedByCurrentUser) {
+                            this.posts[i].likedByCurrentUser = true
+                        }
+
                         break;
                     }
                 }
@@ -57,9 +61,27 @@
             axios.get('/posts').then((response) => {
 
                 Echo.private('posts').listen('PostWasCreated', (e) => {
-                    console.log(e.post)
+                    // console.log(e.post)
                     bus.$emit('post-added', e.post)
                 })
+
+                Echo.private('likes').listen('PostWasLiked', (e) => {
+                    // console.log(e.post)
+                    bus.$emit('post-liked', e.post.id, false)
+                })
+
+                if (window.Notification && Notification.permission !== 'denied') {
+                    Notification.requestPermission((status) => {
+
+                        Echo.private(`App.User.${user.id}`).listen('PostWasLiked', (e) => {
+                            // console.log(e)
+                            new Notification('Post liked', {
+                                body: `${e.user.name} liked your post ${e.post.body}`
+                            })
+                        })
+                    })
+                }
+
 
                 this.posts = response.data
             })

@@ -1923,7 +1923,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post("/posts/".concat(this.post.id, "/likes")).then(function (response) {
-        _bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('post-liked', _this.post.id);
+        _bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('post-liked', _this.post.id, true);
       });
     }
   }
@@ -2059,13 +2059,17 @@ __webpack_require__.r(__webpack_exports__);
     addPost: function addPost(post) {
       this.posts.unshift(post);
     },
-    likePost: function likePost(postId) {
+    likePost: function likePost(postId, likedByCurrentUser) {
       var i;
 
       for (i = 0; i <= this.posts.length; i++) {
         if (this.posts[i].id === postId) {
           this.posts[i].likeCount++;
-          this.posts[i].likedByCurrentUser = true;
+
+          if (likedByCurrentUser) {
+            this.posts[i].likedByCurrentUser = true;
+          }
+
           break;
         }
       }
@@ -2078,9 +2082,25 @@ __webpack_require__.r(__webpack_exports__);
     _bus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('post-liked', this.likePost);
     axios.get('/posts').then(function (response) {
       Echo["private"]('posts').listen('PostWasCreated', function (e) {
-        console.log(e.post);
+        // console.log(e.post)
         _bus__WEBPACK_IMPORTED_MODULE_2__["default"].$emit('post-added', e.post);
       });
+      Echo["private"]('likes').listen('PostWasLiked', function (e) {
+        // console.log(e.post)
+        _bus__WEBPACK_IMPORTED_MODULE_2__["default"].$emit('post-liked', e.post.id, false);
+      });
+
+      if (window.Notification && Notification.permission !== 'denied') {
+        Notification.requestPermission(function (status) {
+          Echo["private"]("App.User.".concat(user.id)).listen('PostWasLiked', function (e) {
+            // console.log(e)
+            new Notification('Post liked', {
+              body: "".concat(e.user.name, " liked your post ").concat(e.post.body)
+            });
+          });
+        });
+      }
+
       _this.posts = response.data;
     });
   }
