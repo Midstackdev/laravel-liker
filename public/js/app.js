@@ -2077,6 +2077,10 @@ __webpack_require__.r(__webpack_exports__);
     _bus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('post-added', this.addPost);
     _bus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('post-liked', this.likePost);
     axios.get('/posts').then(function (response) {
+      Echo["private"]('posts').listen('PostWasCreated', function (e) {
+        console.log(e.post);
+        _bus__WEBPACK_IMPORTED_MODULE_2__["default"].$emit('post-added', e.post);
+      });
       _this.posts = response.data;
     });
   }
@@ -48561,7 +48565,7 @@ var render = function() {
       { staticClass: "media" },
       [
         _vm.post.likedByCurrentUser === false &&
-        _vm.post.canBeLikedByCurrentUser === true
+        _vm.post.user.id !== _vm.user.id
           ? _c("like-button", { attrs: { post: _vm.post } })
           : _vm._e(),
         _vm._v(" "),

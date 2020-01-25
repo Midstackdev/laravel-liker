@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="media">
-		<like-button v-if="post.likedByCurrentUser === false && post.canBeLikedByCurrentUser === true" :post="post"></like-button>
+		<like-button v-if="post.likedByCurrentUser === false && post.user.id !== user.id" :post="post"></like-button>
 		  <img :src="post.user.avatar" class="mr-3" :alt="post.user.mame">
 		  <div class="media-body">
 		    <strong>{{ post.user.name }}</strong>

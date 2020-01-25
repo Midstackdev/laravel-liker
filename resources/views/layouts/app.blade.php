@@ -14,7 +14,7 @@
     <script>
         window.user = {
             authenticated: {{ auth()->check() ? 'true' : 'false' }},
-            id: {{ auth()->check() ? auth()->user()->id : ''  }}
+            id: {{ auth()->check() ? auth()->user()->id : 'null'  }}
         }
     </script>
 

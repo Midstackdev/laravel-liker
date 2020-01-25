@@ -55,6 +55,12 @@
             bus.$on('post-liked', this.likePost)
 
             axios.get('/posts').then((response) => {
+
+                Echo.private('posts').listen('PostWasCreated', (e) => {
+                    console.log(e.post)
+                    bus.$emit('post-added', e.post)
+                })
+
                 this.posts = response.data
             })
         }
